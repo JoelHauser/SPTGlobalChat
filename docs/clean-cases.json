@@ -1,0 +1,87 @@
+[
+  {
+    "name": "plain text passes",
+    "in": "anyone got a LEDX?",
+    "out": "anyone got a LEDX?"
+  },
+  {
+    "name": "rich-text tags lose < and >",
+    "in": "<size=5000>hi</size>",
+    "out": "size=5000hi/size"
+  },
+  {
+    "name": "RTL override removed",
+    "in": "photo\u202egnp.exe",
+    "out": "photognp.exe"
+  },
+  {
+    "name": "zero-width removed",
+    "in": "Sc\u200boop",
+    "out": "Scoop"
+  },
+  {
+    "name": "BOM removed",
+    "in": "\ufeffhello",
+    "out": "hello"
+  },
+  {
+    "name": "newlines become spaces",
+    "in": "line one\nline two",
+    "out": "line one line two"
+  },
+  {
+    "name": "whitespace runs collapse",
+    "in": "a    b\t\tc",
+    "out": "a b c"
+  },
+  {
+    "name": "zalgo capped at two marks",
+    "in": "x\u0301\u0302\u0303\u0304",
+    "out": "x\u0301\u0302"
+  },
+  {
+    "name": "NFC folds before counting",
+    "in": "e\u0301\u0302\u0303\u0304",
+    "out": "\u00e9\u0302\u0303"
+  },
+  {
+    "name": "leading mark dropped",
+    "in": "\u0301abc",
+    "out": "abc"
+  },
+  {
+    "name": "accents survive (NFC)",
+    "in": "cafe\u0301 na\u00efve",
+    "out": "caf\u00e9 na\u00efve"
+  },
+  {
+    "name": "emoji not split",
+    "in": "gg \ud83d\ude00",
+    "out": "gg \ud83d\ude00"
+  },
+  {
+    "name": "lone high surrogate removed",
+    "in": "a\ud800b",
+    "out": "ab"
+  },
+  {
+    "name": "lone low surrogate removed",
+    "in": "a\udc00b",
+    "out": "ab"
+  },
+  {
+    "name": "paragraph separator is a space",
+    "in": "a\u2029b",
+    "out": "a b"
+  },
+  {
+    "name": "empty after cleaning",
+    "in": "\u200b\u202e<>",
+    "out": ""
+  },
+  {
+    "name": "not a string",
+    "in": 42,
+    "out": ""
+  }
+]

@@ -1,0 +1,14 @@
+bin/
+obj/
+dist/
+*.user
+.vs/
+
+node_modules/
+.wrangler/
+
+# Local secrets for `wrangler dev`. Never committed; production secrets live in
+# `wrangler secret`.
+.dev.vars
+.dev.vars.*
+.env

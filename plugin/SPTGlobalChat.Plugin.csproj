@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- net472 because that is what the game's mono runtime loads. -->
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>SPTGlobalChat</RootNamespace>
+    <AssemblyName>SPTGlobalChat</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+
+    <!-- Must match ChatPlugin.Version. -->
+    <Version>0.1.0</Version>
+
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <SPTPath Condition="'$(SPTPath)' == ''">C:\HUH</SPTPath>
+    <GameManaged>$(SPTPath)\EscapeFromTarkov_Data\Managed</GameManaged>
+    <BepInExCore>$(SPTPath)\BepInEx\core</BepInExCore>
+  </PropertyGroup>
+
+  <Target Name="ValidateSPTPath" BeforeTargets="BeforeBuild">
+    <Error Condition="!Exists('$(BepInExCore)\BepInEx.dll')"
+           Text="SPTPath ('$(SPTPath)') is not an SPT install root: no BepInEx\core\BepInEx.dll." />
+  </Target>
+
+  <!--
+    Not referenced: Assembly-CSharp. The copy in Managed is unpatched on an install
+    that has never been launched, and the SPT Launcher's delta renames obfuscated
+    types. Anything of the game's this plugin needs is found by name at runtime.
+
+    Everything below ships with the game or BepInEx, so nothing is copied to the output.
+  -->
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>$(BepInExCore)\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- The facade: BaseUnityPlugin derives from MonoBehaviour as typed against it. -->
+    <Reference Include="UnityEngine">
+      <HintPath>$(GameManaged)\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(GameManaged)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!--
+      EFT's own copy. Chosen over System.Net.WebSockets.ClientWebSocket because it
+      takes a per-connection certificate callback; ClientWebSocket on net472 only obeys
+      the process-wide ServicePointManager one, which any other mod can loosen.
+    -->
+    <Reference Include="websocket-sharp">
+      <HintPath>$(GameManaged)\websocket-sharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(GameManaged)\Newtonsoft.Json.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

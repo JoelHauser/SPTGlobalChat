@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <!--
+      The game's parser (EFT ships 13.0), not System.Text.Json: the cases include lone
+      surrogates, which Newtonsoft hands over as the plugin will see them and
+      System.Text.Json refuses to.
+    -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <!--
+    The plugin is net472 against the game's assemblies and cannot be referenced from
+    here, but TextSafety.cs is pure, so it is compiled in directly.
+  -->
+  <ItemGroup>
+    <Compile Include="..\..\plugin\TextSafety.cs" Link="Plugin\TextSafety.cs" />
+    <None Include="..\..\docs\clean-cases.json" Link="clean-cases.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

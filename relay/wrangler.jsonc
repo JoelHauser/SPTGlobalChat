@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "spt-global-chat",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+
+  "durable_objects": {
+    "bindings": [{ "name": "ROOM", "class_name": "Room" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }],
+
+  "vars": {
+    // Phase 1 only. Must be "false" before the relay is announced -- see CLAUDE.md.
+    "ALLOW_ANONYMOUS": "true"
+  }
+
+  // Secrets are never written here. Phase 3:
+  //   npx wrangler secret put DISCORD_CLIENT_SECRET
+}
